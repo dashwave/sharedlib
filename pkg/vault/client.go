@@ -12,6 +12,8 @@ type VaultClient struct {
 	Cli *vault.Client
 }
 
+type VaultSecretMap map[string]interface{}
+
 func NewVaultClient() (*VaultClient, error) {
 	config := vault.DefaultConfig()
 
@@ -41,6 +43,15 @@ func (vc *VaultClient) GetSecret(secretPath, secretKey string) (string, error) {
 	}
 
 	return value, nil
+}
+
+func (vc *VaultClient) GetSecretMap(secretPath string) (VaultSecretMap, error) {
+	// Read a secret from the default mount path for KV v2 in dev mode, "secret"
+	secret, err := vc.Cli.KVv2("kv-v2").Get(context.Background(), secretPath)
+	if err != nil {
+		return VaultSecretMap{}, fmt.Errorf("unable to read secret: %v", err)
+	}
+	return secret.Data, nil
 }
 
 func (vc *VaultClient) PutSecret(secretpath, secretKey, secretValue string) error {
