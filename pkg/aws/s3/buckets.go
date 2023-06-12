@@ -8,6 +8,8 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/dashwave/sharedlib/pkg/vault"
+
+	sharedAws "github.com/dashwave/sharedlib/pkg/aws"
 )
 
 // CreateBucket creates a new S3 bucket with the specified bucketname using the provided S3 session.
@@ -15,7 +17,7 @@ import (
 // the same. Throws an error if bucket exist on an account not owned by request user, since bucket names are
 // of global namespace. If a new bucket is created, this function also enables ACL and versioning on the new bucket.
 func CreateBucket(sess *s3.S3, secrets vault.VaultSecretMap, config *CreateBucketConfiguration) error {
-	region := secrets[AWS_REGION_KEY].(string)
+	region := secrets[sharedAws.AWS_REGION_KEY].(string)
 	createBucketRequest := &s3.CreateBucketInput{
 		Bucket: aws.String(config.Name),
 		CreateBucketConfiguration: &s3.CreateBucketConfiguration{
@@ -119,7 +121,7 @@ func enableBucketAccelerateTransfer(sess *s3.S3, bucketName string) error {
 
 // UploadObjectToBucket uploads the provided object to S3 bucket. It either completely uploads the object to the bucket
 // and returns successfully or throws an error without any upload.
-func uploadObjectToBucket(sess *s3.S3, object *S3Object) error {
+func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
 	objectReq := &s3.PutObjectInput{
 		Bucket: object.Bucket,
 		Key:    object.Key,
