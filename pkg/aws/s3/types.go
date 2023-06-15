@@ -11,4 +11,5 @@ type S3Object struct {
 	Bucket *string
 	Key    *string
 	Body   []byte
+	ACL    string
 }

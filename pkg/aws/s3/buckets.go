@@ -126,6 +126,7 @@ func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
 		Bucket: object.Bucket,
 		Key:    object.Key,
 		Body:   bytes.NewReader(object.Body),
+		ACL:    aws.String(object.ACL),
 	}
 
 	if err := objectReq.Validate(); err != nil {
