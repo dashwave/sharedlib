@@ -3,7 +3,7 @@ module github.com/dashwave/sharedlib
 go 1.20
 
 require (
-	github.com/aws/aws-sdk-go v1.44.280 // indirect
+	github.com/aws/aws-sdk-go v1.44.285 // indirect
 	github.com/cenkalti/backoff/v3 v3.2.2 // indirect
 	github.com/go-jose/go-jose/v3 v3.0.0 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
