@@ -8,8 +8,6 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/dashwave/sharedlib/pkg/vault"
-
-	sharedAws "github.com/dashwave/sharedlib/pkg/aws"
 )
 
 // CreateBucket creates a new S3 bucket with the specified bucketname using the provided S3 session.
