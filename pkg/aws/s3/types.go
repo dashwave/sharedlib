@@ -13,3 +13,14 @@ type S3Object struct {
 	Body   []byte
 	ACL    string
 }
+
+type GetObjectRequest struct {
+	BucketName        string
+	ObjectName        string
+	VersioningEnabled bool
+	VersionId         string
+}
+
+type GetObjectResponse struct {
+	Body []byte
+}

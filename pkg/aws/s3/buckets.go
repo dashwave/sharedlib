@@ -1,7 +1,6 @@
 package s3
 
 import (
-	"bytes"
 	"fmt"
 	"strings"
 
@@ -109,29 +108,6 @@ func enableBucketAccelerateTransfer(sess *s3.S3, bucketName string) error {
 		return err
 	}
 	fmt.Printf("Successfully enabled accelerated transfer for bucket: %v\n", bucketName)
-	return nil
-}
-
-// UploadObjectToBucket uploads the provided object to S3 bucket. It either completely uploads the object to the bucket
-// and returns successfully or throws an error without any upload.
-func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
-	objectReq := &s3.PutObjectInput{
-		Bucket: object.Bucket,
-		Key:    object.Key,
-		Body:   bytes.NewReader(object.Body),
-		ACL:    aws.String(object.ACL),
-	}
-
-	if err := objectReq.Validate(); err != nil {
-		return err
-	}
-
-	_, err := sess.PutObject(objectReq)
-	if err != nil {
-		return err
-	}
-
-	fmt.Printf("Successfully uploaded object with key %v to the bucket %v.\n", *object.Key, *object.Bucket)
 	return nil
 }
 
