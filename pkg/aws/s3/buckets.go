@@ -14,12 +14,8 @@ import (
 // the same. Throws an error if bucket exist on an account not owned by request user, since bucket names are
 // of global namespace. If a new bucket is created, this function also enables ACL and versioning on the new bucket.
 func CreateBucket(sess *s3.S3, config *CreateBucketConfiguration) error {
-	region := config.Region
 	createBucketRequest := &s3.CreateBucketInput{
 		Bucket: aws.String(config.Name),
-		CreateBucketConfiguration: &s3.CreateBucketConfiguration{
-			LocationConstraint: aws.String(region),
-		},
 	}
 	if _, err := sess.CreateBucket(createBucketRequest); err != nil {
 		switch strings.Split(err.Error(), ":")[0] {

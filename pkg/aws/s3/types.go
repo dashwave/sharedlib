@@ -2,7 +2,6 @@ package s3
 
 type CreateBucketConfiguration struct {
 	Name                       string
-	Region                     string
 	EnableVersionsing          bool
 	EnableACL                  bool
 	EnableTransferAcceleration bool
