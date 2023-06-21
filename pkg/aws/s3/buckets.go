@@ -7,14 +7,13 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/dashwave/sharedlib/pkg/vault"
 )
 
 // CreateBucket creates a new S3 bucket with the specified bucketname using the provided S3 session.
 // If a bucket with the provided name already exist on our account, it would return stating the log for
 // the same. Throws an error if bucket exist on an account not owned by request user, since bucket names are
 // of global namespace. If a new bucket is created, this function also enables ACL and versioning on the new bucket.
-func CreateBucket(sess *s3.S3, secrets vault.VaultSecretMap, config *CreateBucketConfiguration) error {
+func CreateBucket(sess *s3.S3, config *CreateBucketConfiguration) error {
 	region := config.Region
 	createBucketRequest := &s3.CreateBucketInput{
 		Bucket: aws.String(config.Name),
@@ -137,5 +136,16 @@ func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
 	}
 
 	fmt.Printf("Successfully uploaded object with key %v to the bucket %v.\n", *object.Key, *object.Bucket)
+	return nil
+}
+
+// DeleteBucket deletes the bucket for the provided bucketname
+func DeleteBucket(sess *s3.S3, bucketName string) error {
+	deleteBucketRequest := &s3.DeleteBucketInput{
+		Bucket: aws.String(bucketName),
+	}
+	if _, err := sess.DeleteBucket(deleteBucketRequest); err != nil {
+		return err
+	}
 	return nil
 }
