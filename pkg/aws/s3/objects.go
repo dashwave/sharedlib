@@ -6,6 +6,7 @@ import (
 	"io/ioutil"
 
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/s3"
 )
 
@@ -54,4 +55,24 @@ func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 		Body: data,
 	}
 	return object, nil
+}
+
+func DoesObjectExists(sess *s3.S3, r *ObjectExistsReq) (bool, error) {
+	_, err := sess.HeadObject(&s3.HeadObjectInput{
+		Bucket: aws.String(r.BucketName),
+		Key:    aws.String(r.ObjectName),
+	})
+	if err != nil {
+		if aerr, ok := err.(awserr.Error); ok {
+			switch aerr.Code() {
+			case "NotFound":
+				return false, nil
+			default:
+				return false, err
+			}
+		}
+		return false, err
+	}
+
+	return true, nil
 }
