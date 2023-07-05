@@ -24,3 +24,8 @@ type GetObjectRequest struct {
 type GetObjectResponse struct {
 	Body []byte
 }
+
+type ObjectExistsReq struct {
+	BucketName string
+	ObjectName string
+}
