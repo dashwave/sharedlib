@@ -91,6 +91,8 @@ func GetObjectMultipart(sess *s3.S3, r *GetMultiPartObjectRequest) error {
 	return nil
 }
 
+// DoesObjectExists checks if a particular object exist in the specified bucket
+// and returns corresponding boolean value
 func DoesObjectExists(sess *s3.S3, r *ObjectExistsReq) (bool, error) {
 	_, err := sess.HeadObject(&s3.HeadObjectInput{
 		Bucket: aws.String(r.BucketName),
