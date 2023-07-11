@@ -8,6 +8,7 @@ import (
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
+	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
@@ -63,7 +64,7 @@ func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 // This is achieved by dividing the data into multiple parts and downloading them over
 // concurrent steams which is by default set to 5.
 // Set the desired location of downloaded data with destination
-func GetObjectMultipart(sess *s3.S3, r *GetMultiPartObjectRequest) error {
+func GetObjectMultipart(sess *session.Session, r *GetMultiPartObjectRequest) error {
 	getObjectInput := &s3.GetObjectInput{
 		Bucket: aws.String(r.BucketName),
 		Key:    aws.String(r.ObjectName),
