@@ -30,7 +30,7 @@ type GetMultiPartObjectRequest struct {
 	ObjectName        string
 	VersioningEnabled bool
 	VersionId         string
-	destination       string
+	Destination       string
 }
 
 type ObjectExistsReq struct {
