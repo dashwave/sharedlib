@@ -15,7 +15,7 @@ import (
 
 // UploadObjectToBucket uploads the provided object to S3 bucket. It either completely uploads the object to the bucket
 // and returns successfully or throws an error without any upload.
-func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
+func UploadObjectToBucket(s3Session *s3.S3, object *S3Object) error {
 	objectReq := &s3.PutObjectInput{
 		Bucket: object.Bucket,
 		Key:    object.Key,
@@ -27,7 +27,7 @@ func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
 		return err
 	}
 
-	_, err := sess.PutObject(objectReq)
+	_, err := s3Session.PutObject(objectReq)
 	if err != nil {
 		return err
 	}
@@ -38,7 +38,7 @@ func UploadObjectToBucket(sess *s3.S3, object *S3Object) error {
 
 // GetObject downloads the object data for the given object key from the bucket. To get an object with a
 // specific version id, set VersioningEnabled to true and provide the version id.
-func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
+func GetObject(s3Session *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 	getObjectInput := &s3.GetObjectInput{
 		Bucket: aws.String(r.BucketName),
 		Key:    aws.String(r.ObjectName),
@@ -46,7 +46,7 @@ func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 	if r.VersioningEnabled {
 		getObjectInput.VersionId = aws.String(r.VersionId)
 	}
-	resp, err := sess.GetObject(getObjectInput)
+	resp, err := s3Session.GetObject(getObjectInput)
 	if err != nil {
 		return nil, err
 	}
@@ -64,7 +64,7 @@ func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 // This is achieved by dividing the data into multiple parts and downloading them over
 // concurrent steams which is by default set to 5.
 // Set the desired location of downloaded data with destination
-func GetObjectMultipart(sess *session.Session, r *GetMultiPartObjectRequest) error {
+func GetObjectMultipart(awsSess *session.Session, r *GetMultiPartObjectRequest) error {
 	getObjectInput := &s3.GetObjectInput{
 		Bucket: aws.String(r.BucketName),
 		Key:    aws.String(r.ObjectName),
@@ -80,7 +80,7 @@ func GetObjectMultipart(sess *session.Session, r *GetMultiPartObjectRequest) err
 
 	defer file.Close()
 
-	downloader := s3manager.NewDownloader(sess, func(d *s3manager.Downloader) {
+	downloader := s3manager.NewDownloader(awsSess, func(d *s3manager.Downloader) {
 		d.PartSize = 200 * 1024 * 1024 // 200MB per part
 	})
 
@@ -94,8 +94,8 @@ func GetObjectMultipart(sess *session.Session, r *GetMultiPartObjectRequest) err
 
 // DoesObjectExists checks if a particular object exist in the specified bucket
 // and returns corresponding boolean value
-func DoesObjectExists(sess *s3.S3, r *ObjectExistsReq) (bool, error) {
-	_, err := sess.HeadObject(&s3.HeadObjectInput{
+func DoesObjectExists(s3Session *s3.S3, r *ObjectExistsReq) (bool, error) {
+	_, err := s3Session.HeadObject(&s3.HeadObjectInput{
 		Bucket: aws.String(r.BucketName),
 		Key:    aws.String(r.ObjectName),
 	})
