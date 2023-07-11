@@ -25,6 +25,14 @@ type GetObjectResponse struct {
 	Body []byte
 }
 
+type GetMultiPartObjectRequest struct {
+	BucketName        string
+	ObjectName        string
+	VersioningEnabled bool
+	VersionId         string
+	destination       string
+}
+
 type ObjectExistsReq struct {
 	BucketName string
 	ObjectName string

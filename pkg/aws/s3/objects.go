@@ -4,10 +4,12 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"os"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 // UploadObjectToBucket uploads the provided object to S3 bucket. It either completely uploads the object to the bucket
@@ -57,6 +59,40 @@ func GetObject(sess *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
 	return object, nil
 }
 
+// GetObjectMultiipart downloads the object data for the given object key from the bucket.
+// This is achieved by dividing the data into multiple parts and downloading them over
+// concurrent steams which is by default set to 5.
+// Set the desired location of downloaded data with destination
+func GetObjectMultipart(sess *s3.S3, r *GetMultiPartObjectRequest) error {
+	getObjectInput := &s3.GetObjectInput{
+		Bucket: aws.String(r.BucketName),
+		Key:    aws.String(r.ObjectName),
+	}
+	if r.VersioningEnabled {
+		getObjectInput.VersionId = aws.String(r.VersionId)
+	}
+
+	file, err := os.Create(r.destination)
+	if err != nil {
+		return err
+	}
+
+	defer file.Close()
+
+	downloader := s3manager.NewDownloader(sess, func(d *s3manager.Downloader) {
+		d.PartSize = 200 * 1024 * 1024 // 200MB per part
+	})
+
+	_, err = downloader.Download(file, getObjectInput)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// DoesObjectExists checks if a particular object exist in the specified bucket
+// and returns corresponding boolean value
 func DoesObjectExists(sess *s3.S3, r *ObjectExistsReq) (bool, error) {
 	_, err := sess.HeadObject(&s3.HeadObjectInput{
 		Bucket: aws.String(r.BucketName),
