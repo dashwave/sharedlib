@@ -73,7 +73,7 @@ func GetObjectMultipart(sess *session.Session, r *GetMultiPartObjectRequest) err
 		getObjectInput.VersionId = aws.String(r.VersionId)
 	}
 
-	file, err := os.Create(r.destination)
+	file, err := os.Create(r.Destination)
 	if err != nil {
 		return err
 	}

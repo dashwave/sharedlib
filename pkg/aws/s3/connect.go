@@ -31,7 +31,7 @@ func connectAws(v *vault.VaultClient, region string) (*session.Session, vault.Va
 	return session, secrets, nil
 }
 
-func ConnectS3(region string) (*s3.S3, vault.VaultSecretMap) {
+func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 	vaultClient, err := vault.NewVaultClient()
 	if err != nil {
 		panic(err)
@@ -41,5 +41,5 @@ func ConnectS3(region string) (*s3.S3, vault.VaultSecretMap) {
 		panic(err)
 	}
 	s3Session := s3.New(awsSession)
-	return s3Session, secrets
+	return awsSession, s3Session, secrets
 }
