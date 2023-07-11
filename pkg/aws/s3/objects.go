@@ -80,7 +80,7 @@ func GetObjectMultipart(sess *s3.S3, r *GetMultiPartObjectRequest) error {
 	defer file.Close()
 
 	downloader := s3manager.NewDownloader(sess, func(d *s3manager.Downloader) {
-		d.PartSize = 50 * 1024 * 1024 // 50MB per part
+		d.PartSize = 200 * 1024 * 1024 // 200MB per part
 	})
 
 	_, err = downloader.Download(file, getObjectInput)
