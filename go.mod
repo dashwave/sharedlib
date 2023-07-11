@@ -3,7 +3,7 @@ module github.com/dashwave/sharedlib
 go 1.20
 
 require (
-	github.com/aws/aws-sdk-go v1.44.298
+	github.com/aws/aws-sdk-go v1.44.299
 	github.com/hashicorp/vault/api v1.9.2
 )
 
