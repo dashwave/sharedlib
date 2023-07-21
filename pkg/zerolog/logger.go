@@ -1,6 +1,7 @@
 package logger
 
 import (
+	"fmt"
 	"os"
 	"time"
 
@@ -13,7 +14,7 @@ var (
 
 func init() {
 	file, err := os.OpenFile(
-		"logs.log",
+		fmt.Sprintf(`%s.log`, os.Getenv("SERVICE_NAME")),
 		os.O_APPEND|os.O_CREATE|os.O_WRONLY,
 		0664,
 	)
