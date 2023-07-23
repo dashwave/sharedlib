@@ -1,29 +1,40 @@
 package logger
 
-func Error(format string, a ...interface{}) {
+import (
+	"strings"
+)
+
+func Error(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Error().Msgf(format, a...)
 }
 
-func Debug(format string, a ...interface{}) {
+func Debug(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Debug().Msgf(format, a...)
 }
 
-func Info(format string, a ...interface{}) {
+func Info(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Info().Msgf(format, a...)
 }
 
-func Trace(format string, a ...interface{}) {
+func Trace(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Trace().Msgf(format, a...)
 }
 
-func Warn(format string, a ...interface{}) {
+func Warn(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Warn().Msgf(format, a...)
 }
 
-func Panic(format string, a ...interface{}) {
+func Panic(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Panic().Msgf(format, a...)
 }
 
-func Fatal(format string, a ...interface{}) {
+func Fatal(a ...interface{}) {
+	format := strings.Repeat("%v ", len(a))
 	Logger.Fatal().Msgf(format, a...)
 }
