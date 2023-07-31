@@ -13,9 +13,10 @@ var (
 )
 
 func init() {
+	serviceName := os.Getenv("SERVICE_NAME")
 	fmt.Println(" Initializing Zerolog :: Service Name : ", os.Getenv(("SERVICE_NAME")))
 	file, err := os.OpenFile(
-		fmt.Sprintf(`%s.log`, os.Getenv("SERVICE_NAME")),
+		fmt.Sprintf(`%s.log`, serviceName),
 		os.O_CREATE|os.O_APPEND|os.O_RDWR|os.O_TRUNC,
 		0666,
 	)
@@ -31,6 +32,7 @@ func init() {
 	l := zerolog.
 		New(file).
 		With().
+		Str("service", serviceName).
 		Timestamp().
 		Logger()
 	Logger = l
