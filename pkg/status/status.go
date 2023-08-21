@@ -1,21 +1,16 @@
 package status
 
-type Stage int
-type State int
+type Stage string
+type State string
 
 const (
-	Configure Stage = iota
-	Build
+	CONFIGURE Stage = "configure"
+	APK_INSTALL Stage = "apk-install"
+	BUILD Stage = "build"
 )
 
 const (
-	Failed State = iota
-	InProgress
-	Success
+	FAILED State = "failed"
+	INPROGRESS State = "InProgress"
+	SUCCESS State = "success"
 )
-
-type BuildStatus struct{
-	BuildStage 	Stage
-	BuildStatus State
-	Message 	string
-}
