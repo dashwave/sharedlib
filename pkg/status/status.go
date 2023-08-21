@@ -12,9 +12,9 @@ const (
 	BUILD       Stage = "build"
 
 	// States of build's stages
-	FAILED     State = "failed"
-	INPROGRESS State = "InProgress"
-	SUCCESS    State = "success"
+	FAILED     State = "FAILED"
+	INPROGRESS State = "INPROGRESS"
+	SUCCESS    State = "SUCCESS"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
