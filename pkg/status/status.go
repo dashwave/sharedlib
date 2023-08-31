@@ -7,11 +7,11 @@ type State string
 
 const (
 	// Stages of build process
-	CONFIGURE        Stage = "configure"
-	APK_SEARCH       Stage = "apk-search"
-	EMULATOR_CONNECT Stage = "emulator-connect"
-	APK_INSTALL      Stage = "apk-install"
-	BUILD            Stage = "build"
+	CONFIGURE        Stage = "CONFIGURE"
+	APK_SEARCH       Stage = "APK-SEARCH"
+	EMULATOR_CONNECT Stage = "EMULATOR-CONNECT"
+	APK_INSTALL      Stage = "APK-INSTALL"
+	BUILD            Stage = "BUILD"
 
 	// States of build's stages
 	FAILED     State = "FAILED"
