@@ -113,3 +113,18 @@ func DoesObjectExists(s3Session *s3.S3, r *ObjectExistsReq) (bool, error) {
 
 	return true, nil
 }
+
+// DoesObjectsWithPrefix return the list of objects that exist with the
+// given prefix
+func ListObjectsWithPrefix(s3Session *s3.S3, r *ListObjectsReq) ([]*s3.Object, error) {
+	res, err := s3Session.ListObjectsV2(&s3.ListObjectsV2Input{
+		Bucket:  aws.String(r.BucketName),
+		Prefix:  aws.String(r.Prefix),
+		MaxKeys: aws.Int64(r.MaxKeys),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return res.Contents, nil
+}

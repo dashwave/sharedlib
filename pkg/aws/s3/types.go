@@ -37,3 +37,9 @@ type ObjectExistsReq struct {
 	BucketName string
 	ObjectName string
 }
+
+type ListObjectsReq struct {
+	BucketName string
+	Prefix     string
+	MaxKeys    int64
+}
