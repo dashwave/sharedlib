@@ -43,3 +43,9 @@ type ListObjectsReq struct {
 	Prefix     string
 	MaxKeys    int64
 }
+
+type UploadMultipartObjectRequest struct {
+	BucketName string
+	ObjectName string
+	Source     string
+}
