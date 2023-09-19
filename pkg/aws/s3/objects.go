@@ -36,6 +36,37 @@ func UploadObjectToBucket(s3Session *s3.S3, object *S3Object) error {
 	return nil
 }
 
+// UploadObjectMultiipart uploads the object data from the given source object to the bucket.
+// This is achieved by dividing the data into multiple parts and uploading them over
+// concurrent streams which is by default set to 5.
+// Set the desired location of source object/file along with key
+func UploadObjectMultipart(awsSess *session.Session, r *UploadMultipartObjectRequest) error {
+	file, err := os.Open(r.Source)
+	if err != nil {
+		fmt.Println("Error opening local file:", err)
+		return err
+	}
+	defer file.Close()
+
+	// Upload input parameters
+	upParams := &s3manager.UploadInput{
+		Bucket: aws.String(r.BucketName),
+		Key:    aws.String(r.ObjectName),
+		Body:   file,
+	}
+
+	uploader := s3manager.NewUploader(awsSess, func(d *s3manager.Uploader) {
+		d.PartSize = 200 * 1024 * 1024 // 200MB per part
+	})
+
+	_, err = uploader.Upload(upParams)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 // GetObject downloads the object data for the given object key from the bucket. To get an object with a
 // specific version id, set VersioningEnabled to true and provide the version id.
 func GetObject(s3Session *s3.S3, r *GetObjectRequest) (*GetObjectResponse, error) {
