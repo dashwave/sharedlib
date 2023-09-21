@@ -2,6 +2,7 @@ package s3
 
 import (
 	"bytes"
+	"context"
 	"fmt"
 	"io/ioutil"
 	"os"
@@ -36,7 +37,7 @@ func UploadObjectToBucket(s3Session *s3.S3, object *S3Object) error {
 	return nil
 }
 
-// UploadObjectMultiipart uploads the object data from the given source object to the bucket.
+// UploadObjectMultipart uploads the object data from the given source object to the bucket.
 // This is achieved by dividing the data into multiple parts and uploading them over
 // concurrent streams which is by default set to 5.
 // Set the desired location of source object/file along with key
@@ -60,6 +61,38 @@ func UploadObjectMultipart(awsSess *session.Session, r *UploadMultipartObjectReq
 	})
 
 	_, err = uploader.Upload(upParams)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// UploadObjectMultipartWithContext uploads the object data from the given source object to the bucket.
+// This is achieved by dividing the data into multiple parts and uploading them over
+// concurrent streams which is by default set to 5.
+// Set the desired location of source object/file along with key
+// Takes in a context to stop the request when context is expired
+func UploadObjectMultipartWithContext(ctx context.Context, awsSess *session.Session, r *UploadMultipartObjectRequest) error {
+	file, err := os.Open(r.Source)
+	if err != nil {
+		fmt.Println("Error opening local file:", err)
+		return err
+	}
+	defer file.Close()
+
+	// Upload input parameters
+	upParams := &s3manager.UploadInput{
+		Bucket: aws.String(r.BucketName),
+		Key:    aws.String(r.ObjectName),
+		Body:   file,
+	}
+
+	uploader := s3manager.NewUploader(awsSess, func(d *s3manager.Uploader) {
+		d.PartSize = 200 * 1024 * 1024 // 200MB per part
+	})
+
+	_, err = uploader.UploadWithContext(ctx, upParams)
 	if err != nil {
 		return err
 	}
