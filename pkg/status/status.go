@@ -17,6 +17,7 @@ const (
 	FAILED     State = "FAILED"
 	INPROGRESS State = "INPROGRESS"
 	DONE       State = "DONE"
+	CANCELLED  State = "CANCELLED"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
