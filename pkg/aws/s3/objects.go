@@ -193,8 +193,8 @@ func ListObjectsWithPrefix(s3Session *s3.S3, r *ListObjectsReq) ([]*s3.Object, e
 	return res.Contents, nil
 }
 
-// GetObjectPresignedURL generates the public URL to download the object data for the given object key from the bucket. To get an object with a
-// specific version id, set VersioningEnabled to true and provide the version id.
+// GetObjectPresignedURL generates the public URL to download the object data for the given object key from the private bucket.
+// To get an object with aspecific version id, set VersioningEnabled to true and provide the version id.
 // Returns the public URL, which is valid for specific Duration given in request
 func GetObjectPresignedURL(s3Session *s3.S3, r *GetObjectRequest) (string, error) {
 	getObjectInput := &s3.GetObjectInput{
