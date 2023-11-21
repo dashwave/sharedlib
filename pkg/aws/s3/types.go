@@ -1,5 +1,7 @@
 package s3
 
+import "time"
+
 type CreateBucketConfiguration struct {
 	Name                       string
 	EnableVersionsing          bool
@@ -19,6 +21,7 @@ type GetObjectRequest struct {
 	ObjectName        string
 	VersioningEnabled bool
 	VersionId         string
+	Duration          time.Duration
 }
 
 type GetObjectResponse struct {

@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -194,7 +193,10 @@ func ListObjectsWithPrefix(s3Session *s3.S3, r *ListObjectsReq) ([]*s3.Object, e
 	return res.Contents, nil
 }
 
-func GetObjectPresignedURL(s3Session *s3.S3, r *GetObjectRequest, duration time.Duration) (string, error) {
+// GetObjectPresignedURL generates the public URL to download the object data for the given object key from the bucket. To get an object with a
+// specific version id, set VersioningEnabled to true and provide the version id.
+// Returns the public URL, which is valid for specific Duration given in request
+func GetObjectPresignedURL(s3Session *s3.S3, r *GetObjectRequest) (string, error) {
 	getObjectInput := &s3.GetObjectInput{
 		Bucket: aws.String(r.BucketName),
 		Key:    aws.String(r.ObjectName),
@@ -205,7 +207,7 @@ func GetObjectPresignedURL(s3Session *s3.S3, r *GetObjectRequest, duration time.
 
 	req, _ := s3Session.GetObjectRequest(getObjectInput)
 
-	urlStr, err := req.Presign(duration)
+	urlStr, err := req.Presign(r.Duration)
 	if err != nil {
 		return "", err
 	}
