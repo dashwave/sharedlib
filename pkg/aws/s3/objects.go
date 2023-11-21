@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awserr"
@@ -191,4 +192,23 @@ func ListObjectsWithPrefix(s3Session *s3.S3, r *ListObjectsReq) ([]*s3.Object, e
 	}
 
 	return res.Contents, nil
+}
+
+func GetObjectPresignedURL(s3Session *s3.S3, r *GetObjectRequest, duration time.Duration) (string, error) {
+	getObjectInput := &s3.GetObjectInput{
+		Bucket: aws.String(r.BucketName),
+		Key:    aws.String(r.ObjectName),
+	}
+	if r.VersioningEnabled {
+		getObjectInput.VersionId = aws.String(r.VersionId)
+	}
+
+	req, _ := s3Session.GetObjectRequest(getObjectInput)
+
+	urlStr, err := req.Presign(duration)
+	if err != nil {
+		return "", err
+	}
+
+	return urlStr, nil
 }
