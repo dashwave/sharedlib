@@ -1,6 +1,8 @@
 package s3
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -10,8 +12,21 @@ import (
 	sharedAws "github.com/dashwave/sharedlib/pkg/aws"
 )
 
-func connectAws(v *vault.VaultClient, region string) (*session.Session, vault.VaultSecretMap, error) {
-	secrets, err := v.GetSecretMap(sharedAws.VAULT_SECRET_PATH)
+const (
+	US_VAULT    = "US-VAULT"
+	INDIA_VAULT = "INDIA-VAULT"
+)
+
+func ConnectAws(v *vault.VaultClient, region, accountLocation string) (*session.Session, vault.VaultSecretMap, error) {
+	secretPath := ""
+	if accountLocation == US_VAULT {
+		secretPath = sharedAws.VAULT_SECRET_PATH
+	} else if accountLocation == INDIA_VAULT {
+		secretPath = sharedAws.US_VAULT_SECRET_PATH
+	} else {
+		return nil, nil, fmt.Errorf("invalid AWS account location provided : %s", accountLocation)
+	}
+	secrets, err := v.GetSecretMap(secretPath)
 	if err != nil {
 		return nil, nil, err
 	}
@@ -36,7 +51,7 @@ func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 	if err != nil {
 		panic(err)
 	}
-	awsSession, secrets, err := connectAws(vaultClient, region)
+	awsSession, secrets, err := ConnectAws(vaultClient, region, INDIA_VAULT)
 	if err != nil {
 		panic(err)
 	}
