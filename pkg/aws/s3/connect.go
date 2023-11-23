@@ -20,9 +20,9 @@ const (
 func ConnectAws(v *vault.VaultClient, region, accountLocation string) (*session.Session, vault.VaultSecretMap, error) {
 	secretPath := ""
 	if accountLocation == US_VAULT {
-		secretPath = sharedAws.VAULT_SECRET_PATH
-	} else if accountLocation == INDIA_VAULT {
 		secretPath = sharedAws.US_VAULT_SECRET_PATH
+	} else if accountLocation == INDIA_VAULT {
+		secretPath = sharedAws.VAULT_SECRET_PATH
 	} else {
 		return nil, nil, fmt.Errorf("invalid AWS account location provided : %s", accountLocation)
 	}
