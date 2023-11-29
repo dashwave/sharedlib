@@ -67,3 +67,25 @@ func (vc *VaultClient) PutSecret(secretpath, secretKey, secretValue string) erro
 
 	return nil
 }
+
+func (vc *VaultClient) GetSecretByStore(secretPath, secretKey, kvStore string) (string, error) {
+	secret, err := vc.Cli.KVv2(kvStore).Get(context.Background(), secretPath)
+	if err != nil {
+		return "", fmt.Errorf("unable to read secret: %v", err)
+	}
+
+	value, ok := secret.Data[secretKey].(string)
+	if !ok {
+		return "", fmt.Errorf("value type assertion failed: %T %#v", secret.Data[secretKey], secret.Data[secretKey])
+	}
+
+	return value, nil
+}
+
+func (vc *VaultClient) GetSecretMapByStore(secretPath, kvStore string) (VaultSecretMap, error) {
+	secret, err := vc.Cli.KVv2(kvStore).Get(context.Background(), secretPath)
+	if err != nil {
+		return VaultSecretMap{}, fmt.Errorf("unable to read secret: %v", err)
+	}
+	return secret.Data, nil
+}
