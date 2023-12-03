@@ -14,11 +14,19 @@ import (
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
+	"go.opentelemetry.io/otel/trace"
 )
+
+type CustomTracer struct {
+	Tracer trace.Tracer
+}
+
+var T CustomTracer
 
 func GetMiddleware() mux.MiddlewareFunc {
 	return otelmux.Middleware("pm")
 }
+
 func InitTracer() error {
 	insecureMode := true
 
@@ -49,13 +57,14 @@ func InitTracer() error {
 		return err
 	}
 
-	otel.SetTracerProvider(
-		sdktrace.NewTracerProvider(
-			sdktrace.WithSampler(sdktrace.AlwaysSample()),
-			sdktrace.WithBatcher(exporter),
-			sdktrace.WithResource(resources),
-		),
+	tp := sdktrace.NewTracerProvider(
+		sdktrace.WithSampler(sdktrace.AlwaysSample()),
+		sdktrace.WithBatcher(exporter),
+		sdktrace.WithResource(resources),
 	)
+	otel.SetTracerProvider(tp)
+
+	T.Tracer = otel.Tracer(os.Getenv("SERVICE_NAME"))
 
 	return nil
 }
