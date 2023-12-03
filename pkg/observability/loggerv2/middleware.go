@@ -3,6 +3,8 @@ package loggerv2
 import (
 	"net/http"
 	"time"
+
+	"go.opentelemetry.io/otel/trace"
 )
 
 type loggingResponseWriter struct {
@@ -21,8 +23,11 @@ func (lrw *loggingResponseWriter) WriteHeader(code int) {
 
 func LoggerMiddleWare(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		L.Info().Msg("LoggerMiddleWare")
 		start := time.Now()
 		lrw := newLoggingResponseWriter(w)
+		ctx := r.Context()
+		trace := trace.SpanFromContext(ctx)
 		defer func() {
 
 			panicVal := recover()
@@ -35,6 +40,8 @@ func LoggerMiddleWare(next http.Handler) http.Handler {
 				Str("method", r.Method).
 				Str("url", r.URL.RequestURI()).
 				Str("user_agent", r.UserAgent()).
+				Str("span_id", trace.SpanContext().SpanID().String()).
+				Str("trace_id", trace.SpanContext().TraceID().String()).
 				Dur("elapsed_ms", time.Since(start)).
 				Msg("incoming request")
 		}()

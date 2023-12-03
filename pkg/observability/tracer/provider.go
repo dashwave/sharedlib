@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 
+	"github.com/dashwave/sharedlib/pkg/observability/loggerv2"
 	"github.com/gorilla/mux"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
@@ -24,6 +25,7 @@ type CustomTracer struct {
 var T CustomTracer
 
 func GetMiddleware() mux.MiddlewareFunc {
+	loggerv2.L.Info().Msg("GetMiddlewareTracer")
 	return otelmux.Middleware("pm")
 }
 
