@@ -9,10 +9,14 @@ import (
 	"github.com/rs/zerolog"
 )
 
-func InitLogger() (*zerolog.Logger, error) {
+var (
+	l zerolog.Logger
+)
+
+func InitLogger() error {
 	serviceName := os.Getenv("SERVICE_NAME")
 	if serviceName == "" {
-		return nil, fmt.Errorf("SERVICE_NAME is not set")
+		return fmt.Errorf("SERVICE_NAME is not set")
 	}
 	fmt.Println("Initializing Zerolog :: Service Name :: ", serviceName)
 
@@ -23,7 +27,7 @@ func InitLogger() (*zerolog.Logger, error) {
 	)
 	if err != nil {
 		fmt.Sprintln("Initializing Zerolog :: Error while opening log file, Error : ", err)
-		return nil, err
+		return err
 	}
 	defer file.Close()
 
@@ -35,12 +39,12 @@ func InitLogger() (*zerolog.Logger, error) {
 		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{Out: os.Stderr})
 	}
 
-	l := zerolog.
+	l = zerolog.
 		New(writer).
 		With().
 		Str("service", serviceName).
 		Timestamp().
 		Logger()
 
-	return &l, nil
+	return nil
 }
