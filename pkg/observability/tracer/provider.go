@@ -2,17 +2,23 @@ package tracer
 
 import (
 	"context"
+	"net/http"
 	"os"
 
 	"github.com/dashwave/sharedlib/pkg/observability/loggerv2"
+	"github.com/gin-gonic/gin"
 	"github.com/gorilla/mux"
+	"github.com/rs/zerolog"
 	"go.opentelemetry.io/otel"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
+	"go.opentelemetry.io/otel/propagation"
 	"google.golang.org/grpc/credentials"
 
+	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gorilla/mux/otelmux"
+	"go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp"
 	"go.opentelemetry.io/otel/sdk/resource"
 	sdktrace "go.opentelemetry.io/otel/sdk/trace"
 	"go.opentelemetry.io/otel/trace"
@@ -22,11 +28,22 @@ type CustomTracer struct {
 	Tracer trace.Tracer
 }
 
-var T CustomTracer
+func Start(ctx context.Context, spanName string) (context.Context, trace.Span) {
+	ctx, span := t.Tracer.Start(ctx, spanName)
+	spanID := span.SpanContext().SpanID().String()
+	traceID := span.SpanContext().TraceID().String()
+	ctx = loggerv2.ZCtx(ctx).Str("span_id", spanID).Str("trace_id", traceID).Logger().WithContext(ctx)
+	return ctx, span
+}
 
-func GetMiddleware() mux.MiddlewareFunc {
-	loggerv2.L.Info().Msg("GetMiddlewareTracer")
-	return otelmux.Middleware("pm")
+var t CustomTracer
+
+func GetMuxMiddleware() mux.MiddlewareFunc {
+	return otelmux.Middleware(os.Getenv("SERVICE_NAME"))
+}
+
+func GetGinMiddleware() gin.HandlerFunc {
+	return otelgin.Middleware(os.Getenv("SERVICE_NAME"))
 }
 
 func InitTracer() error {
@@ -66,7 +83,31 @@ func InitTracer() error {
 	)
 	otel.SetTracerProvider(tp)
 
-	T.Tracer = otel.Tracer(os.Getenv("SERVICE_NAME"))
+	t.Tracer = otel.Tracer(os.Getenv("SERVICE_NAME"))
+	otel.SetTextMapPropagator(propagation.NewCompositeTextMapPropagator(
+		propagation.TraceContext{},
+		propagation.Baggage{},
+	))
 
 	return nil
+}
+
+func SetSpanID(l zerolog.Logger, s trace.Span) zerolog.Logger {
+	return l.With().Str("span_id", s.SpanContext().SpanID().String()).Logger()
+}
+
+func SetTraceID(l zerolog.Logger, s trace.Span) zerolog.Logger {
+	return l.With().Str("trace_id", s.SpanContext().TraceID().String()).Logger()
+}
+
+func GetTransport() *otelhttp.Transport {
+	return otelhttp.NewTransport(http.DefaultTransport)
+}
+
+func GetSpanIDFromCtx(ctx context.Context) string {
+	return trace.SpanFromContext(ctx).SpanContext().SpanID().String()
+}
+
+func GetTraceIDFromCtx(ctx context.Context) string {
+	return trace.SpanFromContext(ctx).SpanContext().TraceID().String()
 }

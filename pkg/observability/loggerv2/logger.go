@@ -1,19 +1,38 @@
 package loggerv2
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
+	"sync"
 	"time"
 
 	"github.com/rs/zerolog"
+	"github.com/rs/zerolog/log"
 )
 
-var (
-	L zerolog.Logger
-)
+var ll zerolog.Logger
+var once sync.Once
 
-func InitLogger() error {
+func Get() zerolog.Logger {
+	once.Do(func() {
+		if err := initLogger(); err != nil {
+			panic(err)
+		}
+	})
+	return ll
+}
+
+func Ctx(ctx context.Context) *zerolog.Logger {
+	return log.Ctx(ctx)
+}
+
+func ZCtx(ctx context.Context) zerolog.Context {
+	return Ctx(ctx).With()
+}
+
+func initLogger() error {
 	serviceName := os.Getenv("SERVICE_NAME")
 	if serviceName == "" {
 		return fmt.Errorf("SERVICE_NAME is not set")
@@ -38,18 +57,19 @@ func InitLogger() error {
 		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{
 			Out: os.Stderr,
 			FieldsExclude: []string{
-				"service",
 				"user_agent",
+				// "span_id",
+				// "trace_id",
 			},
 		})
 	}
 
-	L = zerolog.
+	ll = zerolog.
 		New(writer).
 		With().
 		Str("service", serviceName).
 		Timestamp().
+		Caller().
 		Logger()
-
 	return nil
 }
