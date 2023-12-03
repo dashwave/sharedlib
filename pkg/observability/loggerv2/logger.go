@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	l zerolog.Logger
+	L zerolog.Logger
 )
 
 func InitLogger() error {
@@ -35,10 +35,16 @@ func InitLogger() error {
 	var writer io.Writer = file
 
 	if os.Getenv("ENV") == "development" {
-		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{Out: os.Stderr})
+		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{
+			Out: os.Stderr,
+			FieldsExclude: []string{
+				"service",
+				"user_agent",
+			},
+		})
 	}
 
-	l = zerolog.
+	L = zerolog.
 		New(writer).
 		With().
 		Str("service", serviceName).
