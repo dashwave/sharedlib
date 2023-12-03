@@ -29,7 +29,6 @@ func InitLogger() error {
 		fmt.Sprintln("Initializing Zerolog :: Error while opening log file, Error : ", err)
 		return err
 	}
-	defer file.Close()
 
 	zerolog.TimeFieldFormat = time.RFC3339
 
