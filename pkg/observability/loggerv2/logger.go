@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
@@ -53,7 +54,7 @@ func initLogger() error {
 
 	var writer io.Writer = file
 
-	if os.Getenv("ENV") == "development" {
+	if os.Getenv("ENV") == "development" || strings.Contains(os.Getenv("ENV"), "local") {
 		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{
 			Out: os.Stderr,
 			FieldsExclude: []string{
