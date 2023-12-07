@@ -2,6 +2,7 @@ package tracer
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"os"
 
@@ -37,6 +38,7 @@ func Start(ctx context.Context, spanName string) (context.Context, trace.Span) {
 }
 
 var t CustomTracer
+var tp *sdktrace.TracerProvider
 
 func GetMuxMiddleware() mux.MiddlewareFunc {
 	return otelmux.Middleware(os.Getenv("SERVICE_NAME"))
@@ -46,8 +48,20 @@ func GetGinMiddleware() gin.HandlerFunc {
 	return otelgin.Middleware(os.Getenv("SERVICE_NAME"))
 }
 
+func Shutdown(ctx context.Context) error {
+	return tp.Shutdown(ctx)
+}
+
 func InitTracer() error {
 	insecureMode := true
+
+	if os.Getenv("OTEL_EXPORTER_ENDPOINT") == "" {
+		return fmt.Errorf("OTEL_EXPORTER_ENDPOINT is not set")
+	}
+
+	if os.Getenv("SERVICE_NAME") == "" {
+		return fmt.Errorf("SERVICE_NAME is not set")
+	}
 
 	secureOption := otlptracegrpc.WithTLSCredentials(credentials.NewClientTLSFromCert(nil, ""))
 	if insecureMode {
@@ -76,11 +90,12 @@ func InitTracer() error {
 		return err
 	}
 
-	tp := sdktrace.NewTracerProvider(
+	tp = sdktrace.NewTracerProvider(
 		sdktrace.WithSampler(sdktrace.AlwaysSample()),
 		sdktrace.WithBatcher(exporter),
 		sdktrace.WithResource(resources),
 	)
+
 	otel.SetTracerProvider(tp)
 
 	t.Tracer = otel.Tracer(os.Getenv("SERVICE_NAME"))
