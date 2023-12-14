@@ -58,3 +58,36 @@ func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 	s3Session := s3.New(awsSession)
 	return awsSession, s3Session, secrets
 }
+
+func GetAWSSession(vaultToken, region, accountLocation string) (*session.Session, error) {
+	vc, err := vault.GetVaultClientByToken(vaultToken)
+	if err != nil {
+		panic(err)
+	}
+
+	secretPath := ""
+	if accountLocation == US_VAULT {
+		secretPath = sharedAws.US_VAULT_SECRET_PATH
+	} else if accountLocation == INDIA_VAULT {
+		secretPath = sharedAws.INDIA_VAULT_SECRET_PATH
+	} else {
+		return nil, fmt.Errorf("invalid AWS account location provided : %s", accountLocation)
+	}
+	secrets, err := vc.GetSecretMapByStore(secretPath, sharedAws.AWS_CREDENTIALS_STORE)
+	if err != nil {
+		return nil, err
+	}
+	accessKeyID := secrets[sharedAws.AWS_ACCESS_KEY_ID].(string)
+	secretAccessKey := secrets[sharedAws.AWS_SECRET_ACCESS_KEY].(string)
+	newSess, err := session.NewSession(
+		&aws.Config{
+			Region: aws.String(region),
+			Credentials: credentials.NewStaticCredentials(
+				accessKeyID,
+				secretAccessKey,
+				"",
+			),
+		})
+	session := session.Must(newSess, err)
+	return session, nil
+}

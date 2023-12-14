@@ -30,6 +30,22 @@ func NewVaultClient() (*VaultClient, error) {
 	return &VaultClient{Cli: client}, nil
 }
 
+func GetVaultClientByToken(accessToken string) (*VaultClient, error) {
+	config := vault.DefaultConfig()
+
+	config.Address = "https://vault.dashwave.io"
+
+	client, err := vault.NewClient(config)
+	if err != nil {
+		return nil, fmt.Errorf("unable to initialize Vault client: %v", err)
+	}
+
+	// Set token with required permissions set
+	client.SetToken(accessToken)
+
+	return &VaultClient{Cli: client}, nil
+}
+
 func (vc *VaultClient) GetSecret(secretPath, secretKey string) (string, error) {
 	// Read a secret from the default mount path for KV v2 in dev mode, "secret"
 	secret, err := vc.Cli.KVv2("kv-v2").Get(context.Background(), secretPath)
