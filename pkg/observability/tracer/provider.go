@@ -15,6 +15,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/trace/noop"
 	"google.golang.org/grpc/credentials"
 
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
@@ -115,6 +116,13 @@ func InitTracer() error {
 	))
 
 	return nil
+}
+
+func InitMockTracer() {
+	// Get a mock tracer
+	otel.SetTracerProvider(noop.NewTracerProvider())
+	tracer := otel.Tracer("mock-tracer")
+	t.Tracer = tracer
 }
 
 func SetSpanID(l zerolog.Logger, s trace.Span) zerolog.Logger {
