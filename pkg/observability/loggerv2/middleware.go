@@ -2,6 +2,7 @@ package loggerv2
 
 import (
 	"bufio"
+	"context"
 	"errors"
 	"net"
 	"net/http"
@@ -47,17 +48,27 @@ func (w *loggingResponseWriter) Hijack() (net.Conn, *bufio.ReadWriter, error) {
 	return h.Hijack()
 }
 
+func SetContextMiddlewareMux(ctx context.Context) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			reqContext := r.Context()
+			newContext := ZCtx(ctx).Logger().WithContext(reqContext)
+			r = r.WithContext(newContext)
+			next.ServeHTTP(w, r)
+		})
+	}
+}
+
 func LoggerMiddleWareMux(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		start := time.Now()
 		lrw := newLoggingResponseWriter(w)
 		ctx := r.Context()
 		trace := trace.SpanFromContext(ctx)
-		logger := Get().With().
-			Str("span_id", trace.SpanContext().SpanID().String()).
+		ctx = ZCtx(ctx).Str("span_id", trace.SpanContext().SpanID().String()).
 			Str("trace_id", trace.SpanContext().TraceID().String()).
-			Logger()
-		r = r.WithContext(logger.WithContext(r.Context()))
+			Logger().WithContext(ctx)
+		r = r.WithContext(ctx)
 		defer func() {
 
 			panicVal := recover()
@@ -65,7 +76,7 @@ func LoggerMiddleWareMux(next http.Handler) http.Handler {
 				lrw.statusCode = http.StatusInternalServerError // ensure that the status code is updated
 				panic(panicVal)                                 // continue panicking
 			}
-			logger.
+			Ctx(ctx).
 				Info().
 				Str("method", r.Method).
 				Str("url", r.URL.RequestURI()).
