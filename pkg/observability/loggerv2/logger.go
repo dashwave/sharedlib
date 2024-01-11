@@ -71,5 +71,18 @@ func initLogger() error {
 		Timestamp().
 		Caller().
 		Logger()
+
+	defaultWriter := zerolog.ConsoleWriter{
+		Out: os.Stderr,
+	}
+
+	defaultLogger := zerolog.New(defaultWriter).
+		With().
+		Timestamp().
+		Caller().
+		Logger()
+
+	zerolog.DefaultContextLogger = &defaultLogger
+
 	return nil
 }
