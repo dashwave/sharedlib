@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"io"
 	"os"
-	"strings"
 	"sync"
 	"time"
 
@@ -54,7 +53,7 @@ func initLogger() error {
 
 	var writer io.Writer = file
 
-	if os.Getenv("ENV") == "development" || strings.Contains(os.Getenv("ENV"), "local") {
+	if os.Getenv("ENABLE_LOGGERV2") == "true" {
 		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{
 			Out: os.Stderr,
 			FieldsExclude: []string{
@@ -72,5 +71,18 @@ func initLogger() error {
 		Timestamp().
 		Caller().
 		Logger()
+
+	defaultWriter := zerolog.ConsoleWriter{
+		Out: os.Stderr,
+	}
+
+	defaultLogger := zerolog.New(defaultWriter).
+		With().
+		Timestamp().
+		Caller().
+		Logger()
+
+	zerolog.DefaultContextLogger = &defaultLogger
+
 	return nil
 }

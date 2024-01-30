@@ -15,6 +15,7 @@ import (
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace"
 	"go.opentelemetry.io/otel/exporters/otlp/otlptrace/otlptracegrpc"
 	"go.opentelemetry.io/otel/propagation"
+	"go.opentelemetry.io/otel/trace/noop"
 	"google.golang.org/grpc/credentials"
 
 	"go.opentelemetry.io/contrib/instrumentation/github.com/gin-gonic/gin/otelgin"
@@ -29,12 +30,22 @@ type CustomTracer struct {
 	Tracer trace.Tracer
 }
 
+type Span trace.Span
+
 func Start(ctx context.Context, spanName string) (context.Context, trace.Span) {
 	ctx, span := t.Tracer.Start(ctx, spanName)
 	spanID := span.SpanContext().SpanID().String()
 	traceID := span.SpanContext().TraceID().String()
 	ctx = loggerv2.ZCtx(ctx).Str("span_id", spanID).Str("trace_id", traceID).Logger().WithContext(ctx)
 	return ctx, span
+}
+
+func SetSpanInContext(span trace.Span, ctx context.Context) context.Context {
+	return trace.ContextWithSpan(ctx, span)
+}
+
+func GetSpanFromContext(ctx context.Context) trace.Span {
+	return trace.SpanFromContext(ctx)
 }
 
 var t CustomTracer
@@ -105,6 +116,13 @@ func InitTracer() error {
 	))
 
 	return nil
+}
+
+func InitMockTracer() {
+	// Get a mock tracer
+	otel.SetTracerProvider(noop.NewTracerProvider())
+	tracer := otel.Tracer("mock-tracer")
+	t.Tracer = tracer
 }
 
 func SetSpanID(l zerolog.Logger, s trace.Span) zerolog.Logger {
