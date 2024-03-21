@@ -4,6 +4,7 @@ import "strings"
 
 type Stage string
 type State string
+type WorkflowStep string
 
 const (
 	// Stages of build process
@@ -18,6 +19,13 @@ const (
 	INPROGRESS State = "INPROGRESS"
 	DONE       State = "DONE"
 	CANCELLED  State = "CANCELLED"
+
+	// Workflow steps
+	GIT_CLONE          WorkflowStep = "GIT_CLONE"
+	ANDROID_BUILD      WorkflowStep = "APK_BUILD"
+	CUSTOM_SCRIPT      WorkflowStep = "CUSTOM_SCRIPT"
+	REMOTE_CACHE_SETUP WorkflowStep = "REMOTE_CACHE_SETUP"
+	APK_DETECTION      WorkflowStep = "APK_DETECTION"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
