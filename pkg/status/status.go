@@ -26,6 +26,7 @@ const (
 	CUSTOM_SCRIPT      WorkflowStep = "CUSTOM_SCRIPT"
 	REMOTE_CACHE_SETUP WorkflowStep = "REMOTE_CACHE_SETUP"
 	APK_DETECTION      WorkflowStep = "APK_DETECTION"
+	BRANCH_CHECKOUT    WorkflowStep = "BRANCH_CHECKOUT"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
