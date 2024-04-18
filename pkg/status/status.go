@@ -21,12 +21,14 @@ const (
 	CANCELLED  State = "CANCELLED"
 
 	// Workflow steps
-	GIT_CLONE          WorkflowStep = "GIT_CLONE"
-	ANDROID_BUILD      WorkflowStep = "APK_BUILD"
-	CUSTOM_SCRIPT      WorkflowStep = "CUSTOM_SCRIPT"
-	REMOTE_CACHE_SETUP WorkflowStep = "REMOTE_CACHE_SETUP"
-	APK_DETECTION      WorkflowStep = "APK_DETECTION"
-	BRANCH_CHECKOUT    WorkflowStep = "BRANCH_CHECKOUT"
+	GIT_CLONE            WorkflowStep = "GIT_CLONE"
+	ANDROID_BUILD        WorkflowStep = "APK_BUILD"
+	GRADLE_ANDROID_BUILD WorkflowStep = "ANDROID_BUILD"
+	CUSTOM_SCRIPT        WorkflowStep = "CUSTOM_SCRIPT"
+	REMOTE_CACHE_SETUP   WorkflowStep = "REMOTE_CACHE_SETUP"
+	APK_DETECTION        WorkflowStep = "APK_DETECTION"
+	OUTPUT_DETECTION     WorkflowStep = "OUTPUT_DETECTION"
+	BRANCH_CHECKOUT      WorkflowStep = "BRANCH_CHECKOUT"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
