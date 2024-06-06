@@ -59,8 +59,8 @@ const (
 	PULL_ORIGIN_ERROR     string = "POE_01"
 
 	// Android build errors
-	PREBUILD_BUILD_ERROR      string = "pbe_01"
-	BUILD_PROCCESS_FAIL_ERROR string = "bpfe_01"
+	PREBUILD_BUILD_ERROR      string = "PBE_01"
+	BUILD_PROCCESS_FAIL_ERROR string = "BPFE_01"
 
 	//fluttr errors
 	DEPENDENCY_INSTALLATION_ERROR  string = "DIE_01"
