@@ -29,6 +29,56 @@ const (
 	APK_DETECTION        WorkflowStep = "APK_DETECTION"
 	OUTPUT_DETECTION     WorkflowStep = "OUTPUT_DETECTION"
 	BRANCH_CHECKOUT      WorkflowStep = "BRANCH_CHECKOUT"
+
+	//Workflow error Codes
+	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
+	BUILDER_STATUS_UPDATE_ERROR          string = "BSR_01"
+	STEP_DETAIL_ERROR                    string = "SD_01"
+	STEP_VERIFICATION_ERROR              string = "SV_01"
+	STEP_RUNNER_SETUP_ERROR              string = "SRS_01"
+	STEP_EXECUTION_ERROR                 string = "SE_01"
+	CACHE_MANAGER_SETUP_ERROR            string = "CMS_01"
+	OUTPUT_PATH_RETRIEVE_ERROR           string = "OPR_01"
+	OUTPUT_DETECTION_ERROR               string = "ODE_01"
+	INVALID_OUTPUT_TYPE_ERROR            string = "IOTE_01"
+	VALIDATE_CLONE_COMMAND_MISSING_ERROR string = "VCME_01"
+	VALIDATE_CLONE_COMMAND_ERROR         string = "VCME_02"
+	CLONE_SPACE_COMMAD_ERROR             string = "CSCE_01"
+	CLONE_SPACE_ERROR                    string = "CSE_01"
+	CLONE_COMMAND_MISSING_ERROR          string = "CCME_01"
+	CLEAR_WORKSPACE_ERROR                string = "CWE_01"
+	CLONE_ERROR                          string = "CE_01"
+	TRANSFORM_DEPS_ERROR                 string = "TDE_01"
+	CACHE_SETUP_ERROR                    string = "CSE_01"
+	CUSTOM_SCRIPT_ERROR                  string = "CSE_01"
+
+	// branch checkout error codes
+	FETCH_ORGIN_ERROR     string = "FOE_01"
+	CLEAN_CHANGES_ERROR   string = "CCE_01"
+	CHECKOUT_BRANCH_ERROR string = "CBE_01"
+	PULL_ORIGIN_ERROR     string = "POE_01"
+
+	// Android build errors
+	PREBUILD_BUILD_ERROR      string = "pbe_01"
+	BUILD_PROCCESS_FAIL_ERROR string = "bpfe_01"
+
+	//fluttr errors
+	DEPENDENCY_INSTALLATION_ERROR  string = "DIE_01"
+	PREBUILD_SETUP_ERRROR          string = "PSE_01"
+	PREBUILD_COMMAND_ERROR         string = "PCE_01"
+	GRADLE_WRAPPER_CONFIGURE_ERROR string = "GWCE_01"
+
+	//reactnative errors
+	NPM_INSTALLATION_ERROR             string = "NIE_01"
+	PREFERRED_DEPENDENCY_ERROR         string = "PDE_01"
+	PREFERRED_DEPENDENCY_COMMAND_ERROR string = "PDCE_01"
+	EXPO_OR_VANILLA_DETECTION_ERROR    string = "EVD_01"
+	CONFIGURE_EXPO_ERROR               string = "CEE_01"
+	ENTRYPOINT_DETECTIOIN_ERROR        string = "EDE_01"
+	BUNDLE_COMMAND_ERROR               string = "BCE_01"
+
+	// output detection erros
+	APK_SEARCH_ERROR string = "ASE_01"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
