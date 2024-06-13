@@ -1,6 +1,9 @@
 package status
 
-import "strings"
+import (
+	"strconv"
+	"strings"
+)
 
 type Stage string
 type State string
@@ -86,7 +89,7 @@ func GenerateBuildMsg(stage Stage, state State, msg string) string {
 	return strings.Join(statusMsg, "|")
 }
 
-func GenerateWorkflowStatusMsg(stepPosition int32, state State, errorCode string, msg string) string {
-	statusMsg := []string{string(stepPosition), string(state), errorCode, msg}
+func GenerateWorkflowStatusMsg(stepPosition int32, state State, errorCode, msg string) string {
+	statusMsg := []string{strconv.Itoa(int(stepPosition)), string(state), errorCode, msg}
 	return strings.Join(statusMsg, "|")
 }
