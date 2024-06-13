@@ -85,3 +85,8 @@ func GenerateBuildMsg(stage Stage, state State, msg string) string {
 	statusMsg := []string{string(stage), string(state), msg}
 	return strings.Join(statusMsg, "|")
 }
+
+func GenerateWorkflowStatusMsg(stepPosition int32, state State, errorCode string, msg string) string {
+	statusMsg := []string{string(stepPosition), string(state), errorCode, msg}
+	return strings.Join(statusMsg, "|")
+}
