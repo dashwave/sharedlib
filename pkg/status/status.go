@@ -25,13 +25,14 @@ const (
 
 	// Workflow steps
 	GIT_CLONE            WorkflowStep = "GIT_CLONE"
-	ANDROID_BUILD        WorkflowStep = "APK_BUILD"
+	ANDROID_BUILD        WorkflowStep = "APK_BUILD" // DEPRECATED (use GRADLE_ANDROID_BUILD)
 	GRADLE_ANDROID_BUILD WorkflowStep = "ANDROID_BUILD"
 	CUSTOM_SCRIPT        WorkflowStep = "CUSTOM_SCRIPT"
 	REMOTE_CACHE_SETUP   WorkflowStep = "REMOTE_CACHE_SETUP"
-	APK_DETECTION        WorkflowStep = "APK_DETECTION"
+	APK_DETECTION        WorkflowStep = "APK_DETECTION" // DEPRECATED (use OUTPUT_DETECTION)
 	OUTPUT_DETECTION     WorkflowStep = "OUTPUT_DETECTION"
 	BRANCH_CHECKOUT      WorkflowStep = "BRANCH_CHECKOUT"
+	ARTEFACT_UPLOAD      WorkflowStep = "ARTEFACT_UPLOAD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
