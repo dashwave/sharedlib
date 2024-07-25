@@ -17,7 +17,7 @@ const (
 	INDIA_VAULT = "INDIA-VAULT"
 )
 
-func ConnectAws(v *vault.VaultClient, region, accountLocation string) (*session.Session, vault.VaultSecretMap, error) {
+func ConnectAws(v *vault.VaultClient, region, accountLocation string, enableS3Acceleration bool) (*session.Session, vault.VaultSecretMap, error) {
 	secretPath := ""
 	if accountLocation == US_VAULT {
 		secretPath = sharedAws.US_VAULT_SECRET_PATH
@@ -41,17 +41,18 @@ func ConnectAws(v *vault.VaultClient, region, accountLocation string) (*session.
 				secretAccessKey,
 				"",
 			),
+			S3UseAccelerate: aws.Bool(enableS3Acceleration),
 		})
 	session := session.Must(newSess, err)
 	return session, secrets, nil
 }
 
-func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
+func ConnectS3(region string, enableS3Acceleration bool) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 	vaultClient, err := vault.NewVaultClient()
 	if err != nil {
 		panic(err)
 	}
-	awsSession, secrets, err := ConnectAws(vaultClient, region, INDIA_VAULT)
+	awsSession, secrets, err := ConnectAws(vaultClient, region, INDIA_VAULT, enableS3Acceleration)
 	if err != nil {
 		panic(err)
 	}
@@ -59,7 +60,7 @@ func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 	return awsSession, s3Session, secrets
 }
 
-func GetAWSSession(vaultToken, region, accountLocation string) (*session.Session, error) {
+func GetAWSSession(vaultToken, region, accountLocation string, enableS3Acceleration bool) (*session.Session, error) {
 	vc, err := vault.GetVaultClientByToken(vaultToken)
 	if err != nil {
 		panic(err)
@@ -87,6 +88,7 @@ func GetAWSSession(vaultToken, region, accountLocation string) (*session.Session
 				secretAccessKey,
 				"",
 			),
+			S3UseAccelerate: aws.Bool(enableS3Acceleration),
 		})
 	session := session.Must(newSess, err)
 	return session, nil
