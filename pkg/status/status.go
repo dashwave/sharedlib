@@ -33,6 +33,8 @@ const (
 	OUTPUT_DETECTION     WorkflowStep = "OUTPUT_DETECTION"
 	BRANCH_CHECKOUT      WorkflowStep = "BRANCH_CHECKOUT"
 	ARTEFACT_UPLOAD      WorkflowStep = "ARTEFACT_UPLOAD"
+	IOS_BUILD            WorkflowStep = "IOS_BUILD"
+	COCOAPODS_INSTALL    WorkflowStep = "COCOAPODS_INSTALL"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
