@@ -35,6 +35,7 @@ const (
 	ARTEFACT_UPLOAD      WorkflowStep = "ARTEFACT_UPLOAD"
 	IOS_BUILD            WorkflowStep = "IOS_BUILD"
 	COCOAPODS_INSTALL    WorkflowStep = "COCOAPODS_INSTALL"
+	XCODE_SELECT         WorkflowStep = "XCODE_SELECT"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
