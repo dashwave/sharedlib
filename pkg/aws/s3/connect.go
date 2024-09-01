@@ -62,7 +62,7 @@ func ConnectS3(region string) (*session.Session, *s3.S3, vault.VaultSecretMap) {
 func GetAWSSession(vaultToken, region, accountLocation string) (*session.Session, error) {
 	vc, err := vault.GetVaultClientByToken(vaultToken)
 	if err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	secretPath := ""
@@ -90,4 +90,33 @@ func GetAWSSession(vaultToken, region, accountLocation string) (*session.Session
 		})
 	session := session.Must(newSess, err)
 	return session, nil
+}
+
+func GetAWSSecretKey(vaultToken, accountLocation string) (string, string, error) {
+	vc, err := vault.GetVaultClientByToken(vaultToken)
+	if err != nil {
+		return "", "", err
+	}
+
+	secretPath := ""
+	if accountLocation == US_VAULT {
+		secretPath = sharedAws.US_VAULT_SECRET_PATH
+	} else if accountLocation == INDIA_VAULT {
+		secretPath = sharedAws.INDIA_VAULT_SECRET_PATH
+	} else {
+		return "", "", fmt.Errorf("invalid AWS account location provided : %s", accountLocation)
+	}
+	secrets, err := vc.GetSecretMapByStore(secretPath, sharedAws.AWS_CREDENTIALS_STORE)
+	if err != nil {
+		return "", "", err
+	}
+	accessKeyID, ok := secrets[sharedAws.AWS_ACCESS_KEY_ID]
+	if !ok {
+		return "", "", fmt.Errorf("access key id not found in vault")
+	}
+	secretAccessKey, ok := secrets[sharedAws.AWS_SECRET_ACCESS_KEY]
+	if !ok {
+		return "", "", fmt.Errorf("secret access key not found in vault")
+	}
+	return accessKeyID.(string), secretAccessKey.(string), nil
 }
