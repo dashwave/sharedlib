@@ -36,6 +36,7 @@ const (
 	IOS_BUILD            WorkflowStep = "IOS_BUILD"
 	COCOAPODS_INSTALL    WorkflowStep = "COCOAPODS_INSTALL"
 	XCODE_SELECT         WorkflowStep = "XCODE_SELECT"
+	IOS_CERTIFICATE_DOWNLOAD WorkflowStep = "IOS_CERTIFICATE_DOWNLOAD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -58,6 +59,7 @@ const (
 	TRANSFORM_DEPS_ERROR                 string = "TDE_01"
 	CACHE_SETUP_ERROR                    string = "CSE_01"
 	CUSTOM_SCRIPT_ERROR                  string = "CSE_01"
+	IOS_CERTIFICATE_DOWNLOAD_ERROR       string = "ICDE_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
