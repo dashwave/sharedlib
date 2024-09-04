@@ -37,6 +37,7 @@ const (
 	COCOAPODS_INSTALL    WorkflowStep = "COCOAPODS_INSTALL"
 	XCODE_SELECT         WorkflowStep = "XCODE_SELECT"
 	IOS_CERTIFICATE_DOWNLOAD WorkflowStep = "IOS_CERTIFICATE_DOWNLOAD"
+	UPLOAD_IPA_TO_CLOUD      WorkflowStep = "UPLOAD_IPA_TO_CLOUD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -60,6 +61,7 @@ const (
 	CACHE_SETUP_ERROR                    string = "CSE_01"
 	CUSTOM_SCRIPT_ERROR                  string = "CSE_01"
 	IOS_CERTIFICATE_DOWNLOAD_ERROR       string = "ICDE_01"
+	UPLOAD_IPA_TO_CLOUD_ERROR            string = "UITCE_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
