@@ -24,15 +24,16 @@ const (
 	CANCELLED  State = "CANCELLED"
 
 	// Workflow steps
-	GIT_CLONE            WorkflowStep = "GIT_CLONE"
-	ANDROID_BUILD        WorkflowStep = "APK_BUILD" // DEPRECATED (use GRADLE_ANDROID_BUILD)
-	GRADLE_ANDROID_BUILD WorkflowStep = "ANDROID_BUILD"
-	CUSTOM_SCRIPT        WorkflowStep = "CUSTOM_SCRIPT"
-	REMOTE_CACHE_SETUP   WorkflowStep = "REMOTE_CACHE_SETUP"
-	APK_DETECTION        WorkflowStep = "APK_DETECTION" // DEPRECATED (use OUTPUT_DETECTION)
-	OUTPUT_DETECTION     WorkflowStep = "OUTPUT_DETECTION"
-	BRANCH_CHECKOUT      WorkflowStep = "BRANCH_CHECKOUT"
-	ARTEFACT_UPLOAD      WorkflowStep = "ARTEFACT_UPLOAD"
+	GIT_CLONE                WorkflowStep = "GIT_CLONE"
+	ANDROID_BUILD            WorkflowStep = "APK_BUILD" // DEPRECATED (use GRADLE_ANDROID_BUILD)
+	GRADLE_ANDROID_BUILD     WorkflowStep = "ANDROID_BUILD"
+	CUSTOM_SCRIPT            WorkflowStep = "CUSTOM_SCRIPT"
+	REMOTE_CACHE_SETUP       WorkflowStep = "REMOTE_CACHE_SETUP"
+	APK_DETECTION            WorkflowStep = "APK_DETECTION" // DEPRECATED (use OUTPUT_DETECTION)
+	OUTPUT_DETECTION         WorkflowStep = "OUTPUT_DETECTION"
+	BRANCH_CHECKOUT          WorkflowStep = "BRANCH_CHECKOUT"
+	ARTEFACT_UPLOAD          WorkflowStep = "ARTEFACT_UPLOAD"
+	IOS_CERTIFICATE_DOWNLOAD WorkflowStep = "IOS_CERTIFICATE_DOWNLOAD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -55,6 +56,7 @@ const (
 	TRANSFORM_DEPS_ERROR                 string = "TDE_01"
 	CACHE_SETUP_ERROR                    string = "CSE_01"
 	CUSTOM_SCRIPT_ERROR                  string = "CSE_01"
+	IOS_CERTIFICATE_DOWNLOAD_ERROR       string = "ICDE_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
