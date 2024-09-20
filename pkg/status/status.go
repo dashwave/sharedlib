@@ -39,6 +39,8 @@ const (
 	IOS_CERTIFICATE_DOWNLOAD WorkflowStep = "IOS_CERTIFICATE_DOWNLOAD"
 	UPLOAD_IPA_TO_CLOUD      WorkflowStep = "UPLOAD_IPA_TO_CLOUD"
 	DOWNLOAD_ASSETS          WorkflowStep = "DOWNLOAD_ASSETS"
+	UPLOAD_AAB_TO_PLAYSTORE  WorkflowStep = "UPLOAD_AAB_TO_PLAYSTORE"
+	PUBLISH_TO_PLAYSTORE     WorkflowStep = "PUBLISH_TO_PLAYSTORE"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -65,6 +67,9 @@ const (
 	UPLOAD_IPA_TO_CLOUD_ERROR            string = "UITCE_01"
 	PODS_INSTALLATION_ERROR              string = "PIE_01"
 	DOWNLOAD_ASSETS_ERROR                string = "DAE_01"
+	APK_PUBLISH_NOT_ALLOWED              string = "APN_01"
+	UPLOAD_AAB_TO_PLAYSTORE_ERROR        string = "UAP_01"
+	PUBLISH_TO_PLAYSTORE_ERROR           string = "PTP_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
