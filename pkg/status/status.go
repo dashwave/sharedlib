@@ -42,6 +42,7 @@ const (
 	DOWNLOAD_ASSETS          WorkflowStep = "DOWNLOAD_ASSETS"
 	UPLOAD_AAB_TO_PLAYSTORE  WorkflowStep = "UPLOAD_AAB_TO_PLAYSTORE"
 	PUBLISH_TO_PLAYSTORE     WorkflowStep = "PUBLISH_TO_PLAYSTORE"
+	FLUTTER_BUILD            WorkflowStep = "FLUTTER_BUILD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
