@@ -9,6 +9,8 @@ type Stage string
 type State string
 type WorkflowStep string
 
+type AIAgentAction string
+
 const (
 	// Stages of build process
 	CONFIGURE        Stage = "CONFIGURE"
@@ -101,6 +103,11 @@ const (
 
 	// output detection erros
 	APK_SEARCH_ERROR string = "ASE_01"
+
+	// AI Agent Actions
+	REQUEST_AGENT AIAgentAction = "REQUEST_AGENT"
+	FIX_ISSUE     AIAgentAction = "FIX_ISSUE"
+	FIX_PR        AIAgentAction = "FIX_PR"
 )
 
 func GenerateBuildMsg(stage Stage, state State, msg string) string {
