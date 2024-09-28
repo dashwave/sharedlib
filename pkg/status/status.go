@@ -45,6 +45,7 @@ const (
 	UPLOAD_AAB_TO_PLAYSTORE  WorkflowStep = "UPLOAD_AAB_TO_PLAYSTORE"
 	PUBLISH_TO_PLAYSTORE     WorkflowStep = "PUBLISH_TO_PLAYSTORE"
 	FLUTTER_BUILD            WorkflowStep = "FLUTTER_BUILD"
+	AI_AGENT_EXECUTION       WorkflowStep = "AI_AGENT_EXECUTION"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -75,6 +76,7 @@ const (
 	APK_PUBLISH_NOT_ALLOWED              string = "APN_01"
 	UPLOAD_AAB_TO_PLAYSTORE_ERROR        string = "UAP_01"
 	PUBLISH_TO_PLAYSTORE_ERROR           string = "PTP_01"
+	AI_AGENT_EXECUTION_ERROR             string = "AAEE_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
@@ -86,7 +88,7 @@ const (
 	PREBUILD_BUILD_ERROR      string = "PBE_01"
 	BUILD_PROCCESS_FAIL_ERROR string = "BPFE_01"
 
-	//fluttr errors
+	//flutter errors
 	DEPENDENCY_INSTALLATION_ERROR  string = "DIE_01"
 	PREBUILD_SETUP_ERRROR          string = "PSE_01"
 	PREBUILD_COMMAND_ERROR         string = "PCE_01"
