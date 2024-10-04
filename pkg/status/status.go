@@ -46,6 +46,7 @@ const (
 	PUBLISH_TO_PLAYSTORE     WorkflowStep = "PUBLISH_TO_PLAYSTORE"
 	FLUTTER_BUILD            WorkflowStep = "FLUTTER_BUILD"
 	AI_AGENT_EXECUTION       WorkflowStep = "AI_AGENT_EXECUTION"
+	NPM_INSTALL              WorkflowStep = "NPM_INSTALL"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
