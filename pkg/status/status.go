@@ -48,6 +48,7 @@ const (
 	AI_AGENT_EXECUTION       WorkflowStep = "AI_AGENT_EXECUTION"
 	NPM_INSTALL              WorkflowStep = "NPM_INSTALL"
 	REACTNATIVE_BUILD        WorkflowStep = "REACTNATIVE_BUILD"
+	FASTLANE_EXEC            WorkflowStep = "FASTLANE_EXEC"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
@@ -79,6 +80,8 @@ const (
 	UPLOAD_AAB_TO_PLAYSTORE_ERROR        string = "UAP_01"
 	PUBLISH_TO_PLAYSTORE_ERROR           string = "PTP_01"
 	AI_AGENT_EXECUTION_ERROR             string = "AAEE_01"
+	FASTLANE_EXEC_ERROR                  string = "FEE_01"
+	FASTLANE_EXEC_SETUP_ERROR            string = "FESE_01"
 
 	// branch checkout error codes
 	FETCH_ORGIN_ERROR     string = "FOE_01"
