@@ -47,6 +47,7 @@ const (
 	FLUTTER_BUILD            WorkflowStep = "FLUTTER_BUILD"
 	AI_AGENT_EXECUTION       WorkflowStep = "AI_AGENT_EXECUTION"
 	NPM_INSTALL              WorkflowStep = "NPM_INSTALL"
+	REACTNATIVE_BUILD        WorkflowStep = "REACTNATIVE_BUILD"
 
 	//Workflow error Codes
 	BUILD_LOG_FILE_OPEN_ERROR            string = "BLF_01"
