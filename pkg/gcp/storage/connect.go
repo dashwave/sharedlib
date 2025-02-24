@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 	"fmt"
+	"os"
 
 	"cloud.google.com/go/storage"
 	"github.com/dashwave/sharedlib/pkg/vault"
@@ -52,28 +53,12 @@ func ConnectStorage() (*storage.Client, vault.VaultSecretMap) {
 	return storageClient, secrets
 }
 
-func GetGCPClient(vaultToken, accountLocation string) (*storage.Client, error) {
-	vc, err := vault.GetVaultClientByToken(vaultToken)
-	if err != nil {
-		return nil, err
+func GetGCPClient() (*storage.Client, error) {
+	if os.Getenv("GOOGLE_APPLICATION_CREDENTIALS") == "" {
+		return nil, fmt.Errorf("GOOGLE_APPLICATION_CREDENTIALS environment variable is not set")
 	}
 
-	secretPath := ""
-	if accountLocation == US_VAULT {
-		secretPath = "US-GCP-ACCOUNT"
-	} else if accountLocation == INDIA_VAULT {
-		secretPath = "INDIA-GCP-ACCOUNT"
-	} else {
-		return nil, fmt.Errorf("invalid GCP account location provided : %s", accountLocation)
-	}
-
-	secrets, err := vc.GetSecretMapByStore(secretPath, "gcp-credentials")
-	if err != nil {
-		return nil, err
-	}
-
-	credentialsJSON := secrets["GCP_CREDENTIALS_JSON"].(string)
-	client, err := storage.NewClient(context.Background(), option.WithCredentialsJSON([]byte(credentialsJSON)))
+	client, err := storage.NewClient(context.Background())
 	if err != nil {
 		return nil, err
 	}
