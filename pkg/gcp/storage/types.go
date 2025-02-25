@@ -25,7 +25,8 @@ type GetObjectRequest struct {
 }
 
 type GetObjectResponse struct {
-	Body []byte
+	Body        []byte
+	ContentType string
 }
 
 type GetMultiPartObjectRequest struct {
