@@ -82,7 +82,12 @@ func GetObject(client *storage.Client, r *GetObjectRequest) (*GetObjectResponse,
 		return nil, err
 	}
 
-	return &GetObjectResponse{Body: data}, nil
+	attrs, err := obj.Attrs(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	return &GetObjectResponse{Body: data, ContentType: attrs.ContentType}, nil
 }
 
 // GetObjectMultipart downloads the object data for the given object name from the bucket.
@@ -166,6 +171,19 @@ func GetObjectSignedURL(client *storage.Client, r *GetObjectRequest) (string, er
 
 	opts := &storage.SignedURLOptions{
 		Method:  "GET",
+		Expires: time.Now().Add(r.Duration),
+	}
+
+	return bucket.SignedURL(r.ObjectName, opts)
+}
+
+// GetUploadSignedURL generates a signed URL that can be used to upload an object to the bucket.
+// The URL will be valid for the specified duration.
+func GetUploadSignedURL(client *storage.Client, r *GetObjectRequest) (string, error) {
+	bucket := client.Bucket(r.BucketName)
+
+	opts := &storage.SignedURLOptions{
+		Method:  "PUT",
 		Expires: time.Now().Add(r.Duration),
 	}
 

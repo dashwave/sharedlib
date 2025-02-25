@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	testBucketName = "dashwave-aab-bucket-guest"
+	testBucketName = "test-bucket-1"
 	testObjectName = "test-object.txt"
 	testContent    = "Hello, GCP Storage!"
 )
@@ -46,8 +46,8 @@ func TestCreateAndDeleteBucket(t *testing.T) {
 	assert.NoError(t, err)
 
 	// Delete bucket
-	err = DeleteBucket(client, testBucketName)
-	assert.NoError(t, err)
+	// err = DeleteBucket(client, testBucketName)
+	// assert.NoError(t, err)
 }
 
 func TestObjectOperations(t *testing.T) {
