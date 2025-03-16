@@ -19,6 +19,11 @@ func UploadObjectToBucket(client *storage.Client, object *StorageObject) error {
 	obj := bucket.Object(*object.Name)
 
 	writer := obj.NewWriter(ctx)
+
+	if object.ContentType != "" {
+		writer.ContentType = object.ContentType
+	}
+
 	if object.ACL != "" {
 		writer.PredefinedACL = object.ACL
 	}
