@@ -10,10 +10,11 @@ type CreateBucketConfiguration struct {
 }
 
 type StorageObject struct {
-	Bucket *string
-	Name   *string
-	Body   []byte
-	ACL    string
+	Bucket      *string
+	Name        *string
+	Body        []byte
+	ACL         string
+	ContentType string
 }
 
 type GetObjectRequest struct {
