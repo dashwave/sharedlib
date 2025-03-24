@@ -45,7 +45,7 @@ func initLogger() error {
 
 	logFile := &lumberjack.Logger{
 		Filename:   fmt.Sprintf("%s.log", serviceName),
-		MaxSize:    50, // MB
+		MaxSize:    1 * 1000, // 1 GB
 		MaxBackups: 3,
 		MaxAge:     7,    // days
 		Compress:   true, // gzip old logs
