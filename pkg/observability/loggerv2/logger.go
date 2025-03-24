@@ -10,6 +10,8 @@ import (
 
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
+	"gopkg.in/natefinch/lumberjack.v2"
+
 )
 
 var ll zerolog.Logger
@@ -33,33 +35,29 @@ func ZCtx(ctx context.Context) zerolog.Context {
 }
 
 func initLogger() error {
+	
 	serviceName := os.Getenv("SERVICE_NAME")
 	if serviceName == "" {
 		return fmt.Errorf("SERVICE_NAME is not set")
 	}
+
 	fmt.Println("Initializing Zerolog :: Service Name :: ", serviceName)
 
-	file, err := os.OpenFile(
-		fmt.Sprintf(`%s.log`, serviceName),
-		os.O_CREATE|os.O_APPEND|os.O_RDWR|os.O_TRUNC,
-		0666,
-	)
-	if err != nil {
-		fmt.Sprintln("Initializing Zerolog :: Error while opening log file, Error : ", err)
-		return err
+	logFile := &lumberjack.Logger{
+		Filename:   fmt.Sprintf("%s.log", serviceName),
+		MaxSize:    50, // MB
+		MaxBackups: 3,
+		MaxAge:     7,    // days
+		Compress:   true, // gzip old logs
 	}
 
-	zerolog.TimeFieldFormat = time.RFC3339
-
-	var writer io.Writer = file
+	var writer io.Writer = logFile
 
 	if os.Getenv("ENABLE_LOGGERV2") == "true" {
-		writer = zerolog.MultiLevelWriter(file, zerolog.ConsoleWriter{
+		writer = zerolog.MultiLevelWriter(logFile, zerolog.ConsoleWriter{
 			Out: os.Stderr,
 			FieldsExclude: []string{
 				"user_agent",
-				// "span_id",
-				// "trace_id",
 			},
 		})
 	}
@@ -72,17 +70,10 @@ func initLogger() error {
 		Caller().
 		Logger()
 
-	defaultWriter := zerolog.ConsoleWriter{
-		Out: os.Stderr,
-	}
-
-	defaultLogger := zerolog.New(defaultWriter).
-		With().
-		Timestamp().
-		Caller().
-		Logger()
-
+	defaultWriter := zerolog.ConsoleWriter{Out: os.Stderr}
+	defaultLogger := zerolog.New(defaultWriter).With().Timestamp().Caller().Logger()
 	zerolog.DefaultContextLogger = &defaultLogger
+
 
 	return nil
 }
