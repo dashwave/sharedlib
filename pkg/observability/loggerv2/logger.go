@@ -43,7 +43,7 @@ func initLogger() error {
 	fmt.Println("Initializing Zerolog :: Service Name :: ", serviceName)
 
 	logFile := &lumberjack.Logger{
-		Filename:   fmt.Sprintf("%s.log", serviceName),
+		Filename:   fmt.Sprintf(`logs/%s.log`, serviceName),
 		MaxSize:    1 * 1000, // 1 GB
 		MaxBackups: 3,
 		MaxAge:     7,    // days
